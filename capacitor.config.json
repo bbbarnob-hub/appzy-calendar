@@ -1,0 +1,11 @@
+{
+  "appId": "com.appzy.calendar",
+  "appName": "APPZY Calendar",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": true
+  },
+  "server": {
+    "androidScheme": "https"
+  }
+}

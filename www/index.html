@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0d1020">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>APPZY Calendar</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ============ HEADER ============ -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">◆</span>
+      <div class="brand-txt">
+        <h1 id="monthLabel">November 2026</h1>
+        <p id="subLabel">Saturday, 7 November</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button class="icon-btn" id="todayBtn" aria-label="Go to today">Today</button>
+      <button class="icon-btn ghost" id="searchBtn" aria-label="Search events">⌕</button>
+      <button class="icon-btn ghost" id="menuBtn" aria-label="Settings">⚙</button>
+    </div>
+  </header>
+
+  <!-- ============ VIEW SWITCH ============ -->
+  <nav class="segmented" role="tablist">
+    <button class="seg active" data-view="month">Month</button>
+    <button class="seg" data-view="week">Week</button>
+    <button class="seg" data-view="agenda">Agenda</button>
+  </nav>
+
+  <!-- ============ MONTH VIEW ============ -->
+  <section class="view active" id="view-month">
+    <div class="weekday-row">
+      <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+    </div>
+    <div class="grid" id="monthGrid"></div>
+  </section>
+
+  <!-- ============ WEEK VIEW ============ -->
+  <section class="view" id="view-week">
+    <div class="week-nav">
+      <button class="nav-arrow" id="prevWeek">‹</button>
+      <span id="weekLabel"></span>
+      <button class="nav-arrow" id="nextWeek">›</button>
+    </div>
+    <div class="week-strip" id="weekStrip"></div>
+    <div class="week-agenda" id="weekAgenda"></div>
+  </section>
+
+  <!-- ============ AGENDA VIEW ============ -->
+  <section class="view" id="view-agenda">
+    <div class="agenda-list" id="agendaList"></div>
+  </section>
+
+  <!-- ============ FAB ============ -->
+  <button class="fab" id="addBtn" aria-label="Add event">+</button>
+
+  <!-- ============ DAY SHEET ============ -->
+  <div class="sheet-wrap" id="daySheet">
+    <div class="sheet">
+      <div class="sheet-grip"></div>
+      <div class="sheet-head">
+        <div>
+          <h2 id="sheetDate">7 November</h2>
+          <p id="sheetDay">Saturday</p>
+        </div>
+        <button class="icon-btn ghost" id="closeSheet">✕</button>
+      </div>
+      <div class="day-events" id="dayEvents"></div>
+      <button class="primary-btn" id="sheetAdd">+ Add event on this day</button>
+    </div>
+  </div>
+
+  <!-- ============ EDITOR SHEET ============ -->
+  <div class="sheet-wrap" id="editSheet">
+    <div class="sheet tall">
+      <div class="sheet-grip"></div>
+      <div class="sheet-head">
+        <h2 id="editTitle">New event</h2>
+        <button class="icon-btn ghost" id="closeEdit">✕</button>
+      </div>
+      <form id="eventForm" autocomplete="off">
+        <label class="field">
+          <span>Title</span>
+          <input type="text" id="evTitle" placeholder="e.g. Dentist appointment" required maxlength="120">
+        </label>
+
+        <div class="row2">
+          <label class="field">
+            <span>Date</span>
+            <input type="date" id="evDate" required>
+          </label>
+          <label class="field">
+            <span>All day</span>
+            <span class="switch">
+              <input type="checkbox" id="evAllDay">
+              <i></i>
+            </span>
+          </label>
+        </div>
+
+        <div class="row2" id="timeRow">
+          <label class="field">
+            <span>Starts</span>
+            <input type="time" id="evStart">
+          </label>
+          <label class="field">
+            <span>Ends</span>
+            <input type="time" id="evEnd">
+          </label>
+        </div>
+
+        <label class="field">
+          <span>Colour</span>
+          <div class="colors" id="colorPick">
+            <button type="button" class="swatch" data-c="blue" style="--c:#5b8cff"></button>
+            <button type="button" class="swatch" data-c="violet" style="--c:#9b5bff"></button>
+            <button type="button" class="swatch" data-c="green" style="--c:#2fd27a"></button>
+            <button type="button" class="swatch" data-c="amber" style="--c:#ffb43a"></button>
+            <button type="button" class="swatch" data-c="rose" style="--c:#ff5b7f"></button>
+            <button type="button" class="swatch" data-c="cyan" style="--c:#2fd8e0"></button>
+          </div>
+        </label>
+
+        <label class="field">
+          <span>Repeat</span>
+          <select id="evRepeat">
+            <option value="none">Does not repeat</option>
+            <option value="daily">Every day</option>
+            <option value="weekly">Every week</option>
+            <option value="monthly">Every month</option>
+            <option value="yearly">Every year</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span>Reminder</span>
+          <select id="evRemind">
+            <option value="0">At time of event</option>
+            <option value="5">5 minutes before</option>
+            <option value="15">15 minutes before</option>
+            <option value="30">30 minutes before</option>
+            <option value="60">1 hour before</option>
+            <option value="1440">1 day before</option>
+            <option value="-1">No reminder</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span>Notes</span>
+          <textarea id="evNotes" rows="2" placeholder="Optional details…" maxlength="600"></textarea>
+        </label>
+
+        <div class="form-actions">
+          <button type="button" class="danger-btn" id="deleteEv">Delete</button>
+          <button type="submit" class="primary-btn" id="saveEv">Save event</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============ SEARCH SHEET ============ -->
+  <div class="sheet-wrap" id="searchSheet">
+    <div class="sheet tall">
+      <div class="sheet-grip"></div>
+      <div class="sheet-head">
+        <h2>Search</h2>
+        <button class="icon-btn ghost" id="closeSearch">✕</button>
+      </div>
+      <input type="search" id="searchInput" class="search-input" placeholder="Search events…">
+      <div class="agenda-list" id="searchResults"></div>
+    </div>
+  </div>
+
+  <!-- ============ SETTINGS SHEET ============ -->
+  <div class="sheet-wrap" id="settingsSheet">
+    <div class="sheet tall">
+      <div class="sheet-grip"></div>
+      <div class="sheet-head">
+        <h2>Settings</h2>
+        <button class="icon-btn ghost" id="closeSettings">✕</button>
+      </div>
+
+      <div class="setting">
+        <div>
+          <strong>Notifications</strong>
+          <small>Reminders for upcoming events</small>
+        </div>
+        <span class="switch"><input type="checkbox" id="notifToggle"><i></i></span>
+      </div>
+
+      <div class="setting">
+        <div>
+          <strong>Start week on Monday</strong>
+          <small>Affects month and week views</small>
+        </div>
+        <span class="switch"><input type="checkbox" id="weekStartToggle" checked><i></i></span>
+      </div>
+
+      <div class="setting">
+        <div>
+          <strong>Show weekends</strong>
+          <small>Highlight Saturday and Sunday</small>
+        </div>
+        <span class="switch"><input type="checkbox" id="weekendToggle" checked><i></i></span>
+      </div>
+
+      <h3 class="section-title">Export &amp; backup</h3>
+      <div class="btn-row">
+        <button class="secondary-btn" id="exportBtn">Export .ics</button>
+        <button class="secondary-btn" id="copyBtn">Copy backup</button>
+      </div>
+      <textarea id="backupBox" class="backup-box" placeholder="Backup JSON appears here…" spellcheck="false"></textarea>
+      <button class="secondary-btn" id="importBtn">Restore from backup text</button>
+
+      <h3 class="section-title danger-title">Danger zone</h3>
+      <button class="danger-btn wide" id="clearAll">Delete all events</button>
+
+      <p class="footnote">APPZY Calendar · v1.0.0<br>Built by APPZY — professional app development.</p>
+    </div>
+  </div>
+
+  <!-- ============ TOAST ============ -->
+  <div class="toast" id="toast"></div>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
